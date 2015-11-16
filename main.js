@@ -9,7 +9,8 @@ var auth = require("./auth");
 var admins = [
 	"95454946421379072",	// Pikachu
 	"114774672654073856",	// cutei
-	"114903349463089152"	// Ravenn
+	"114903349463089152",	// Ravenn
+	"115750198885482498"	// Lonely
 ];
 
 var songQueue = [];
@@ -175,7 +176,7 @@ client.Dispatcher.on(Events.MESSAGE_CREATE, (e) => {
 			case "help":
 				e.message.channel.sendMessage("Syntax:" +
 					"\n```Normal commands:" +
-					"\n* !pikayt [song] - Request a song by ID or name (youtube search)" +
+					"\n* !pikayt [song] - Request a song by URL or name (youtube search) - NOW WITH SOUNDCLOUD SUPPORT" +
 					"\n* !pikaqueue - See the songs currently in the queue" +
 					"\nAdmin commands:" +
 					"\n* !pikajoin - Bot will join the voice room you are in (and stop the song that is playing if it's in a different one)" +
@@ -183,7 +184,9 @@ client.Dispatcher.on(Events.MESSAGE_CREATE, (e) => {
 					"\n* !pikastop - Stop the song playing (next play will go to the next song in the queue)" +
 					"\n* !pikaleave - Leave all voice channels" +
 					"\n* !pikaclear - Clear the song queue" +
-					"\n* !pikaskip - Skip the current song and play the next one in the queue (if there is one)```");
+					"\n* !pikaskip - Skip the current song and play the next one in the queue (if there is one)" +
+					"\nOwner commands:" +
+					"\n* !pikaadmin [userid] - Sets a userid as a temporary admin until bot restart```");
 				break;
 
 			case "pikaqueue":
@@ -195,6 +198,15 @@ client.Dispatcher.on(Events.MESSAGE_CREATE, (e) => {
 					e.message.channel.sendMessage("The queue is empty!");
 				}
 				break;
+
+			case "pikaadmin":
+				if (e.message.author.id == "95454946421379072") {
+					var newAdmin = content.substring(beginArgs + 1);
+					admins.push(newAdmin)
+					e.message.channel.sendMessage("@" + e.message.author.username": Added " + newAdmin + " as a temporary admin!", e.message.author);
+				} else {
+					e.message.channel.sendMessage("@" + e.message.author.username + ": No permission!", e.message.author);
+				}
 
 			default:
 				console.log("Unknown command: " + command)
