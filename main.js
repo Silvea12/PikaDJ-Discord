@@ -304,13 +304,12 @@ function play(file, voiceConnectionInfo, forcePlay) {
 			ffProc.kill();
 			encoder.kill();
 
+			songQueue.shift();
 			if (songQueue.length > 0) {
 				setTimeout(play, 0, null, false, true);
 			} else {
 				playing = false;
 			}
-			songQueue.shift();
 		}
-		//setTimeout(play, 0, voiceConnectionInfo)
 	});
 }
