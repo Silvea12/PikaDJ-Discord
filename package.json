@@ -1,0 +1,16 @@
+{
+  "name": "pikadj-discord",
+  "version": "1.0.0",
+  "description": "PikaDJ ported to DiscordApp",
+  "main": "main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Pikachu",
+  "license": "ISC",
+  "dependencies": {
+    "discordie": "git+https://github.com/qeled/discordie.git",
+    "fluent-ffmpeg": "^2.0.1",
+    "request": "^2.65.0"
+  }
+}
