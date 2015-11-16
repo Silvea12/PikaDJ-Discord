@@ -23,6 +23,10 @@ module.exports = function(query, callback) {
 	var vidData = JSON.parse(data[1]);
 
 	var file = vidData.requested_formats[vidData.requested_formats.length - 1];
+	var wantedFile = vidData.requested_formats.find(elem => elem.format.toLowerCase().indexOf("audio") != -1);
+	if (wantedFile)
+		file = wantedFile;
+
 	var filepath = "/home/silvea/Music/DiscordRequests/" + vidData.id + "." + file.ext;
 
 	console.log(vidData);
