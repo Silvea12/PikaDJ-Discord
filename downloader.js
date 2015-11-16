@@ -22,8 +22,8 @@ module.exports = function(query, callback) {
 	var data = proc.stdout.toString().split("\n");
 	var vidData = JSON.parse(data[1]);
 
-	var file = vidData.requested_formats[vidData.requested_formats.length - 1];
-	var wantedFile = vidData.requested_formats.find(elem => elem.format.toLowerCase().indexOf("audio") != -1);
+	var file = vidData.formats[vidData.formats.length - 1];
+	var wantedFile = vidData.formats.find(elem => elem.format.toLowerCase().indexOf("audio") != -1);
 	if (wantedFile)
 		file = wantedFile;
 
