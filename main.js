@@ -203,7 +203,7 @@ client.Dispatcher.on(Events.MESSAGE_CREATE, (e) => {
 				if (e.message.author.id == "95454946421379072") {
 					var newAdmin = content.substring(beginArgs + 1);
 					admins.push(newAdmin)
-					e.message.channel.sendMessage("@" + e.message.author.username": Added " + newAdmin + " as a temporary admin!", e.message.author);
+					e.message.channel.sendMessage("@" + e.message.author.username + ": Added " + newAdmin + " as a temporary admin!", e.message.author);
 				} else {
 					e.message.channel.sendMessage("@" + e.message.author.username + ": No permission!", e.message.author);
 				}
