@@ -27,7 +27,11 @@ module.exports = function(query, callback) {
 
 	proc.on('close', code => {
 		var data = output.split("\n");
-		var vidData = JSON.parse(data[1]);
+		try {
+			var vidData = JSON.parse(data[1]);
+		} catch(err) {
+			return ({error: "There was an error getting video info! Error: " + err});
+		}
 
 		var allowedFormats = vidData.formats.filter(elem => elem.url.indexOf("rtmp") != 0);
 		var file = allowedFormats[allowedFormats.length - 1];

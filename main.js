@@ -196,7 +196,8 @@ client.Dispatcher.on(Events.MESSAGE_CREATE, (e) => {
 					"\n* !pikalock - Lock the queue so no new songs may be added (useful when planning a bot restart)" +
 					"\n* !pikaunlock - Unlock the queue so new songs may be added" +
 					"\nOwner commands:" +
-					"\n* !pikaadmin [userid] - Sets a userid as a temporary admin until bot restart```");
+					"\n* !pikaadmin [userid] - Sets a userid as a temporary admin until bot restart" +
+					"\n* !pikapleb [userid] - Temporarily removes a userid from admins until restart```");
 				break;
 
 			case "pikaqueue":
@@ -230,11 +231,22 @@ client.Dispatcher.on(Events.MESSAGE_CREATE, (e) => {
 			case "pikaadmin":
 				if (e.message.author.id == "95454946421379072") {
 					var newAdmin = content.substring(beginArgs + 1);
-					admins.push(newAdmin)
+					admins.push(newAdmin);
 					e.message.channel.sendMessage("@" + e.message.author.username + ": Added " + newAdmin + " as a temporary admin!", e.message.author);
 				} else {
 					e.message.channel.sendMessage("@" + e.message.author.username + ": No permission!", e.message.author);
 				}
+				break;
+
+			case "pikapleb":
+				if (e.message.author.id == "95454946421379072") {
+					var newNormie = content.substring(beginArgs + 1);
+					admins = admins.filter(elem => elem != newNormie)
+					e.message.channel.sendMessage("@" + e.message.author.username + ": Removed " + newAdmin + " from admins temporarily!", e.message.author);
+				} else {
+					e.message.channel.sendMessage("@" + e.message.author.username + ": No permission!", e.message.author);
+				}
+				break;
 
 			default:
 				console.log("Unknown command: " + command)
