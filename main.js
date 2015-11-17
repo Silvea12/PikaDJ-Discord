@@ -240,9 +240,9 @@ client.Dispatcher.on(Events.MESSAGE_CREATE, (e) => {
 
 			case "pikapleb":
 				if (e.message.author.id == "95454946421379072") {
-					var newNormie = content.substring(beginArgs + 1);
-					admins = admins.filter(elem => elem != newNormie)
-					e.message.channel.sendMessage("@" + e.message.author.username + ": Removed " + newAdmin + " from admins temporarily!", e.message.author);
+					var newPleb = content.substring(beginArgs + 1);
+					admins = admins.filter(elem => elem != newPleb)
+					e.message.channel.sendMessage("@" + e.message.author.username + ": Removed " + newPleb + " from admins temporarily!", e.message.author);
 				} else {
 					e.message.channel.sendMessage("@" + e.message.author.username + ": No permission!", e.message.author);
 				}
