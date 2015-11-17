@@ -10,10 +10,12 @@ var admins = [
 	"95454946421379072",	// Pikachu
 	"114774672654073856",	// cutei
 	"114903349463089152",	// Ravenn
-	"115750198885482498"	// Lonely
+	"115750198885482498",	// Lonely
+	"114991267322003457"	// BritishFuckBoi aka Lelouch
 ];
 
 var songQueue = [];
+var queueLocked = false;
 var playing = false;
 
 var client = new Discordie();
@@ -55,14 +57,20 @@ client.Dispatcher.on(Events.MESSAGE_CREATE, (e) => {
 						if (channel.members.some(member => {
 							return member.id == e.message.author.id;
 						})) {
+
+							if (queueLocked) {
+								e.message.channel.sendMessage("@" + e.message.author.username + ": Sorry, but the queue is currently locked! Try again later.", e.message.author);
+								return true;
+							}
+
 							e.message.channel.sendTyping().then(() => {
 							currSpeakingChannel = e.message.channel;
-								var song = downloader(content.substring(beginArgs + 1), file => {
+								downloader(content.substring(beginArgs + 1), file => {
 									if (file.error) {
 										currSpeakingChannel.sendMessage("@" + e.message.author.username + " ERROR: " + file.error, e.message.author);
 										return;
 									}
-									currSpeakingChannel.sendMessage("@" + e.message.author.username + ": Now downloading " + song, e.message.author);
+									currSpeakingChannel.sendMessage("@" + e.message.author.username + ": Now downloading " + file.name, e.message.author);
 									if (!currVoiceChannel) {
 										currVoiceChannel = channel;
 										channel.join().then(v => play(file, v));
@@ -185,6 +193,8 @@ client.Dispatcher.on(Events.MESSAGE_CREATE, (e) => {
 					"\n* !pikaleave - Leave all voice channels" +
 					"\n* !pikaclear - Clear the song queue" +
 					"\n* !pikaskip - Skip the current song and play the next one in the queue (if there is one)" +
+					"\n* !pikalock - Lock the queue so no new songs may be added (useful when planning a bot restart)" +
+					"\n* !pikaunlock - Unlock the queue so new songs may be added" +
 					"\nOwner commands:" +
 					"\n* !pikaadmin [userid] - Sets a userid as a temporary admin until bot restart```");
 				break;
@@ -196,6 +206,24 @@ client.Dispatcher.on(Events.MESSAGE_CREATE, (e) => {
 						"```");
 				} else {
 					e.message.channel.sendMessage("The queue is empty!");
+				}
+				break;
+
+			case "pikalock":
+				if (admins.indexOf(e.message.author.id) != -1) {
+					queueLocked = true;
+					e.message.channel.sendMessage("@" + e.message.author.username + ": Locked queue!", e.message.author);
+				} else {
+					e.message.channel.sendMessage("@" + e.message.author.username + ": No permission!", e.message.author);
+				}
+				break;
+
+			case "pikaunlock":
+				if (admins.indexOf(e.message.author.id) != -1) {
+					queueLocked = false;
+					e.message.channel.sendMessage("@" + e.message.author.username + ": Unlocked queue!", e.message.author);
+				} else {
+					e.message.channel.sendMessage("@" + e.message.author.username + ": No permission!", e.message.author);
 				}
 				break;
 
