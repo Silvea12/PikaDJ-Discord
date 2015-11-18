@@ -334,6 +334,8 @@ function play(file, voiceConnectionInfo, forcePlay) {
 					});
 					ffProc.kill();
 					encoder.kill();
+					delete ffProc;
+					delete encoder;
 				}
 				return;
 			}
@@ -353,6 +355,8 @@ function play(file, voiceConnectionInfo, forcePlay) {
 			});
 			ffProc.kill();
 			encoder.kill();
+			delete ffProc;
+			delete encoder;
 
 			songQueue.shift();
 			if (songQueue.length > 0) {
