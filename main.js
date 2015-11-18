@@ -37,6 +37,18 @@ client.Dispatcher.on(Events.GATEWAY_READY, (e) => {
 });
 
 client.Dispatcher.on(Events.MESSAGE_CREATE, (e) => {
+	if (e.message.channel.id == "116499992499191808") {
+		e.message.delete();
+		if (e.message.author.id == "95454946421379072") {
+			if (e.message.content.toLowerCase() == "clear") {
+				e.message.channel.fetchMessages(null,null,"116500044365955077").then(v => {
+					v.messages.forEach(msg => {msg.delete();});
+				});
+			}
+		}
+		return;
+	}
+
 	if (e.message.author.id == client.User.id) {
 		console.log("Ignoring own message");
 		return;
@@ -79,7 +91,7 @@ client.Dispatcher.on(Events.MESSAGE_CREATE, (e) => {
 										}
 										return;
 									} else {
-										currSpeakingChannel.sendMessage("@" + e.message.author.username + ": Now downloading " + file.name, e.message.author);
+										currSpeakingChannel.sendMessage("@" + e.message.author.username + ": " + file.name + " has been added to the queue!", e.message.author);
 									}
 									if (!currVoiceChannel) {
 										currVoiceChannel = channel;
@@ -205,6 +217,7 @@ client.Dispatcher.on(Events.MESSAGE_CREATE, (e) => {
 					"\n* !pikaskip - Skip the current song and play the next one in the queue (if there is one)" +
 					"\n* !pikalock - Lock the queue so no new songs may be added (useful when planning a bot restart)" +
 					"\n* !pikaunlock - Unlock the queue so new songs may be added" +
+					"\n* !pikafix - Resets internal state. WARNING: DANGEROUS" +
 					"\nOwner commands:" +
 					"\n* !pikaadmin [userid] - Sets a userid as a temporary admin until bot restart" +
 					"\n* !pikapleb [userid] - Temporarily removes a userid from admins until restart```");
@@ -258,6 +271,19 @@ client.Dispatcher.on(Events.MESSAGE_CREATE, (e) => {
 				}
 				break;
 
+			case "pikafix":
+				if (admins.indexOf(e.message.author.id) != -1) {
+					stopPlaying = true;
+					setTimeout(() => {
+						stopPlaying = false;
+						playing = false;
+						e.message.channel.sendMessage("@" + e.message.author.username + ": Reset state!", e.message.author);
+					}, 100);
+				} else {
+					e.message.channel.sendMessage("@" + e.message.author.username + ": No permission!", e.message.author);
+				}
+				break;
+
 			default:
 				console.log("Unknown command: " + command)
 		}
@@ -270,7 +296,6 @@ client.Dispatcher.on(Events.MESSAGE_CREATE, (e) => {
 
 var stopPlaying = false;
 function play(file, voiceConnectionInfo, forcePlay) {
-
 	if (file)
 		songQueue.push(file);
 	
@@ -281,6 +306,7 @@ function play(file, voiceConnectionInfo, forcePlay) {
 
 	if (!file)
 		return;
+
 
 	playing = true;
 
