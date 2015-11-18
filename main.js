@@ -70,7 +70,17 @@ client.Dispatcher.on(Events.MESSAGE_CREATE, (e) => {
 										currSpeakingChannel.sendMessage("@" + e.message.author.username + " ERROR: " + file.error, e.message.author);
 										return;
 									}
-									currSpeakingChannel.sendMessage("@" + e.message.author.username + ": Now downloading " + file.name, e.message.author);
+									var queuePosition = songQueue.findIndex(elem => elem.path == file.path)
+									if (queuePosition != -1) {
+										if (queuePosition == 0) {
+											currSpeakingChannel.sendMessage("@" + e.message.author.username + ": " + file.name + " is already playing!", e.message.author);
+										} else {
+											currSpeakingChannel.sendMessage("@" + e.message.author.username + ": " + file.name + " is already queued, and will be playing in " + queuePosition + " song(s)!", e.message.author);
+										}
+										return;
+									} else {
+										currSpeakingChannel.sendMessage("@" + e.message.author.username + ": Now downloading " + file.name, e.message.author);
+									}
 									if (!currVoiceChannel) {
 										currVoiceChannel = channel;
 										channel.join().then(v => play(file, v));
