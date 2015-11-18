@@ -183,7 +183,7 @@ client.Dispatcher.on(Events.MESSAGE_CREATE, (e) => {
 				if (admins.indexOf(e.message.author.id) != -1) {
 					songQueue.shift();
 					stopPlaying = true;
-					setTimeout(play, 100, null, false, true);
+					setTimeout(play, 100, null, false, false);
 					e.message.channel.sendMessage("@" + e.message.author.username + ": Skipped song", e.message.author);
 				} else {
 					e.message.channel.sendMessage("@" + e.message.author.username + ": No permission!", e.message.author);
@@ -270,20 +270,21 @@ client.Dispatcher.on(Events.MESSAGE_CREATE, (e) => {
 
 var stopPlaying = false;
 function play(file, voiceConnectionInfo, forcePlay) {
+
 	if (file)
 		songQueue.push(file);
 	
 	if (playing && !forcePlay)
 		return;
-	
-	playing = true;
-
-	stopPlaying = false;
 
 	file = songQueue[0];
 
 	if (!file)
 		return;
+
+	playing = true;
+
+	stopPlaying = false;
 
 	var ffProc = new ffmpeg(file.path)
 		.native()
@@ -361,12 +362,10 @@ function play(file, voiceConnectionInfo, forcePlay) {
 			songQueue.shift();
 			if (songQueue.length > 0) {
 				setTimeout(play, 0, null, false, true);
+			} else {
+				playing = false;
+				console.log("Queue empty!");
 			}
-		}
-
-		if (songQueue.length == 0) {
-			playing = false;
-			console.log("Queue empty!");
 		}
 	});
 }
