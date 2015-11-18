@@ -43,7 +43,7 @@ module.exports = function(query, callback) {
 
 		console.log("Title:\n" + data[0] + "\nFilename: " + vidData.id + "." + file.ext + "\nDuration: " + vidData.duration + "\nURL: " + vidData.webpage_url + "\nThumbnail: " + vidData.thumbnail);
 
-		if (vidData.duration > 60*15) {
+		if (vidData.duration > 60*20) {
 			return callback({error: "Sorry, but " + data[0] + " is too long!"});
 		}
 
