@@ -171,8 +171,8 @@ client.Dispatcher.on(Events.MESSAGE_CREATE, (e) => {
 
 			case "pikaskip":
 				if (admins.indexOf(e.message.author.id) != -1) {
-					stopPlaying = true;
 					songQueue.shift();
+					stopPlaying = true;
 					setTimeout(play, 100, null, false, true);
 					e.message.channel.sendMessage("@" + e.message.author.username + ": Skipped song", e.message.author);
 				} else {
@@ -347,9 +347,12 @@ function play(file, voiceConnectionInfo, forcePlay) {
 			songQueue.shift();
 			if (songQueue.length > 0) {
 				setTimeout(play, 0, null, false, true);
-			} else {
-				playing = false;
 			}
+		}
+
+		if (songQueue.length == 0) {
+			playing = false;
+			console.log("Queue empty!");
 		}
 	});
 }
