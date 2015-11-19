@@ -339,6 +339,13 @@ function play(file, voiceConnectionInfo, forcePlay) {
 		if (actuallyDecoding) return;
 
 		if(!client.VoiceConnections.length) {
+			if (currVoiceChannel) {
+				currSpeakingChannel.sendMessage("**##### ALERT #####**\nBUGSPLAT - ALERT PIKACHU!\nERROR CODE: `ERR_VOICE_CHANNEL_NOT_JOINED`\n**##### ALERT #####**");
+				currSpeakingChannel.sendMessage("`Try re-requesting a song, it may fix me. If not, tell Pikachu the error code above.`");
+				currVoiceChannel.join();
+			} else {
+				currSpeakingChannel.sendMessage("**##### ALERT #####**\nnBUGSPLAT - ALERT PIKACHU!\nERROR CODE: `ERR_VOICE_CHANNEL_IS_NIL`\n**##### ALERT #####**");
+			}
 			return console.log("Voice not connected");
 		}
 
